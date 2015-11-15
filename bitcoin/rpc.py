@@ -481,8 +481,12 @@ class Proxy(BaseProxy):
 
         FIXME: Returned data types are not yet converted.
         """
+        if len(txid) == 64:  # Its already in the right format
+          t = txid
+        else:
+          t = b2lx(txid)
         try:
-            r = self._call('gettransaction', b2lx(txid))
+            r = self._call('gettransaction', t)
         except JSONRPCError as ex:
             raise IndexError('%s.getrawtransaction(): %s (%d)' %
                     (self.__class__.__name__, ex.error['message'], ex.error['code']))

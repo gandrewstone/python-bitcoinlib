@@ -126,6 +126,8 @@ class COutPoint(ImmutableSerializable):
     __slots__ = ['hash', 'n']
 
     def __init__(self, hash=b'\x00'*32, n=0xffffffff):
+        if len(hash)  == 64:
+          hash = lx(hash)
         if not len(hash) == 32:
             raise ValueError('COutPoint: hash must be exactly 32 bytes; got %d bytes' % len(hash))
         object.__setattr__(self, 'hash', hash)
