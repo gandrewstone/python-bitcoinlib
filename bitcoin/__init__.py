@@ -41,6 +41,16 @@ class TestNetParams(bitcoin.core.CoreTestNetParams):
                        'SCRIPT_ADDR':196,
                        'SECRET_KEY' :239}
 
+class NolNetParams(bitcoin.core.CoreNolNetParams):
+    MESSAGE_START = b'\xfb\xce\xc4\xe9'
+    DEFAULT_PORT = 9333
+    RPC_PORT = 9332
+    DNS_SEEDS = (("bitcoinunlimited.info", "nolnet-seed.bitcoinunlimited.info"),
+                 )
+    BASE58_PREFIXES = {'PUBKEY_ADDR':25,
+                       'SCRIPT_ADDR':68,
+                       'SECRET_KEY' :35}
+
 class RegTestParams(bitcoin.core.CoreRegTestParams):
     MESSAGE_START = b'\xfa\xbf\xb5\xda'
     DEFAULT_PORT = 18444
@@ -73,5 +83,7 @@ def SelectParams(name):
         params = bitcoin.core.coreparams = TestNetParams()
     elif name == 'regtest':
         params = bitcoin.core.coreparams = RegTestParams()
+    elif name == 'nol' or name == 'nolnet':
+        params = bitcoin.core.coreparams = NolNetParams()
     else:
         raise ValueError('Unknown chain %r' % name)

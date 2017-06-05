@@ -568,6 +568,11 @@ class CoreRegTestParams(CoreTestNetParams):
     SUBSIDY_HALVING_INTERVAL = 150
     PROOF_OF_WORK_LIMIT = 2**256-1 >> 1
 
+class CoreNolNetParams(CoreMainParams):
+    NAME = 'nolnet'
+    GENESIS_BLOCK = CBlock.deserialize(x('01000000000000000000000000000000000000000000000000000000000000000000000098c7b3f690bbadd6436aedc353e45b7da181f28566eebfc86a3db5e7c723e7230f743359ffff001dbd8a30890101000000010000000000000000000000000000000000000000000000000000000000000000ffffffff20001e42696720626c6f636b73204654572028666f722074686520776f726c6429ffffffff0100f2052a010000001976a914a123a6fdc265e1bbcf1123458891bd7af1a1b5d988ac00000000'))
+
+
 """Master global setting for what core chain params we're using"""
 coreparams = CoreMainParams()
 
@@ -584,6 +589,8 @@ def _SelectCoreParams(name):
         coreparams = CoreTestNetParams()
     elif name == 'regtest':
         coreparams = CoreRegTestParams()
+    elif name == 'nol' or name == 'nolnet':
+        coreparams = CoreNolNetParams()
     else:
         raise ValueError('Unknown chain %r' % name)
 
