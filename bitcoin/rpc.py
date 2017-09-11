@@ -37,6 +37,8 @@ import json
 import os
 import platform
 import sys
+import pdb
+import time
 try:
     import urllib.parse as urlparse
 except ImportError:
@@ -207,9 +209,9 @@ class BaseProxy(object):
         http_response = self.__conn.getresponse()
         if http_response is None:
             raise JSONRPCError({
-                'code': -342, 'message': 'missing HTTP response from server'})
-
-        return json.loads(http_response.read().decode('utf8'),
+                    'code': -342, 'message': 'missing HTTP response from server'})
+        response = http_response.read().decode('utf8')
+        return json.loads(response,
                           parse_float=decimal.Decimal)
 
     def __del__(self):
@@ -570,11 +572,13 @@ class Proxy(BaseProxy):
         r = self._call('sendmany', fromaccount, json_payments, minconf, comment)
         return lx(r)
 
-    def sendtoaddress(self, addr, amount):
+    def sendtoaddress(self, addr, amount, comment="", commentTo="", subtractfeefromamount=False, changeAddr=None):
         """Sent amount to a given address"""
         addr = str(addr)
+        if changeAddr:
+            changeAddr=str(changeAddr)
         amount = float(amount)/COIN
-        r = self._call('sendtoaddress', addr, amount)
+        r = self._call('sendtoaddress', addr, amount, comment, commentTo, subtractfeefromamount, changeAddr)
         return lx(r)
 
     def signrawtransaction(self, tx, *args):
